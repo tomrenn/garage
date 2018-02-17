@@ -9,9 +9,10 @@ ip = socket.gethostbyname(socket.gethostname())
 host = socket.gethostname()
 print(ip)
 print(host)
+is_raspberry_pi = host == 'raspberrypi'
 
 pin = 4
-if (host != 'raspberrypi'):
+if not is_raspberry_pi:
     print('USING MOCK PIN')
     pin = MockPin(pin)
 
@@ -40,4 +41,7 @@ def garage():
         return redirect(redirect_addr + "#success")
     return 'OK'
 
-app.run()
+if is_raspberry_pi:
+    app.run(host='0.0.0.0', threaded=True)
+else:
+    app.run()
